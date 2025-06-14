@@ -22,11 +22,11 @@ class BankReviewScraper:
     """Class to scrape reviews for Ethiopian bank mobile apps"""
     
     def __init__(self):
-        # Bank app IDs on Google Play Store
+        # Bank app IDs on Google Play Store (verified from web search)
         self.bank_apps = {
-            'CBE': 'com.combanketh.selfservice',  # Commercial Bank of Ethiopia
-            'BOA': 'com.boa.mobilebanking',       # Bank of Abyssinia  
-            'Dashen': 'com.dashenbank.mobilebanking'  # Dashen Bank
+            'CBE': 'com.combanketh.mobilebanking',  # Commercial Bank of Ethiopia
+            'BOA': 'com.boa.boaMobileBanking',      # Bank of Abyssinia (BoA Mobile)
+            'Dashen': 'com.dashen.dashensuperapp'   # Dashen Bank (SuperApp)
         }
         
         # Create data directory if it doesn't exist
