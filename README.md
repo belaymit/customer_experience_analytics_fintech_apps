@@ -123,6 +123,21 @@ python preprocess_data.py
 - `data/task1_execution.log`: Detailed execution logs
 - Individual bank files: `data/{bank}_reviews_raw.csv`
 
+### MongoDB Cloud Storage
+
+Store your data in MongoDB Atlas for advanced analysis:
+
+```bash
+# Upload to MongoDB Atlas
+cd scripts
+python mongodb_storage.py
+
+# Run analysis queries
+python mongodb_queries.py
+```
+
+See `MONGODB_SETUP.md` for detailed setup instructions.
+
 ### KPIs Achieved
 
 - ✅ **1,200+ reviews** collected across three banks
