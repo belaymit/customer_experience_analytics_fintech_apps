@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""
-Web scraper for collecting mobile banking app reviews from Google Play Store
-for Ethiopian banks: CBE, BOA, and Dashen Bank.
-
-Author: Data Analytics Team
-Date: 2024
-"""
-
 import pandas as pd
 from google_play_scraper import app, reviews_all
 import time

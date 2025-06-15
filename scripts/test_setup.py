@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Test script to verify Task 1 setup and dependencies
-"""
-
-import sys
 import importlib
 
 def test_imports():
@@ -25,16 +19,16 @@ def test_imports():
     for package in required_packages:
         try:
             importlib.import_module(package)
-            print(f"✅ {package}")
+            print(f"{package}")
         except ImportError as e:
-            print(f"❌ {package}: {e}")
+            print(f"{package}: {e}")
             failed_imports.append(package)
     
     if failed_imports:
-        print(f"\n❌ Failed to import: {failed_imports}")
+        print(f"\nFailed to import: {failed_imports}")
         return False
     else:
-        print("\n🎉 All packages imported successfully!")
+        print("\nAll packages imported successfully!")
         return True
 
 def test_google_play_scraper():
@@ -44,10 +38,10 @@ def test_google_play_scraper():
         
         # Test with WhatsApp (a common app that should exist)
         test_app = app('com.whatsapp')
-        print(f"✅ Google Play Scraper test successful: {test_app['title']}")
+        print(f"Google Play Scraper test successful: {test_app['title']}")
         return True
     except Exception as e:
-        print(f"❌ Google Play Scraper test failed: {e}")
+        print(f"Google Play Scraper test failed: {e}")
         print("Note: This might be due to network issues or rate limiting")
         print("The scraper package is installed correctly")
         return True  # Return True since the package is installed
@@ -67,10 +61,10 @@ def main():
     # Final result
     print("\n" + "="*50)
     if imports_ok and scraper_ok:
-        print("🎉 SETUP VERIFICATION PASSED!")
+        print("SETUP VERIFICATION PASSED!")
         print("You're ready to run Task 1!")
     else:
-        print("❌ SETUP VERIFICATION FAILED!")
+        print("SETUP VERIFICATION FAILED!")
         print("Please check the errors above and fix them.")
     print("="*50)
 

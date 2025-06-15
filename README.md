@@ -194,11 +194,3 @@ See `MONGODB_SETUP.md` for detailed setup instructions.
 ## License
 
 This project is licensed under the MIT License - see the [MIT.md](MIT.md) file for details.
-
-## Contact
-
-For questions or support, please contact the development team.
-
----
-
-*This project is part of the KAIM (Kigali AI & ML) program focusing on practical data analytics applications in the fintech sector.*

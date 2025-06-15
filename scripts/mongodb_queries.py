@@ -1,19 +1,11 @@
-#!/usr/bin/env python3
-"""
-MongoDB Query Examples for Bank Review Analysis
-
-This script provides example queries for analyzing the bank review data
-stored in MongoDB Atlas. Useful for Task 2 and beyond.
-
-Author: Data Analytics Team
-Date: 2024
-"""
-
 from pymongo import MongoClient
-import pandas as pd
 import logging
-from datetime import datetime, timedelta
 import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv('config.env')
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,10 +14,15 @@ logger = logging.getLogger(__name__)
 class MongoDBAnalyzer:
     """Class for analyzing bank review data in MongoDB"""
     
-    def __init__(self, connection_string, database_name="bank_reviews_db", collection_name="reviews"):
-        self.connection_string = connection_string
-        self.database_name = database_name
-        self.collection_name = collection_name
+    def __init__(self, connection_string=None, database_name=None, collection_name=None):
+        # Use environment variables or defaults
+        self.connection_string = connection_string or os.getenv('MONGODB_URI')
+        self.database_name = database_name or os.getenv('MONGODB_DATABASE', 'customer_reviews')
+        self.collection_name = collection_name or os.getenv('MONGODB_COLLECTION', 'reviews')
+        
+        if not self.connection_string:
+            raise ValueError("MongoDB URI must be provided in config.env file or as MONGODB_URI environment variable")
+        
         self.client = None
         self.db = None
         self.collection = None
@@ -195,24 +192,24 @@ class MongoDBAnalyzer:
 
 def main():
     """Main function to run analysis examples"""
-    print("📊 MongoDB Analysis Examples")
+    print("MongoDB Analysis Examples")
     print("This script demonstrates various queries for analyzing bank review data")
-    
-    # Get connection string
-    connection_string = input("Enter your MongoDB Atlas connection string: ").strip()
-    
-    if not connection_string:
-        print("Connection string required!")
-        return
-    
-    # Initialize analyzer
-    analyzer = MongoDBAnalyzer(connection_string)
-    
-    if not analyzer.connect():
-        print("Failed to connect to MongoDB")
-        return
+    print("Using MongoDB configuration from config.env file")
+    print()
     
     try:
+        # Initialize analyzer with environment variables
+        analyzer = MongoDBAnalyzer()
+        
+        if not analyzer.connect():
+            print("Failed to connect to MongoDB")
+            return
+        
+        print("Connected to MongoDB Atlas successfully!")
+        print(f"Database: {analyzer.database_name}")
+        print(f"Collection: {analyzer.collection_name}")
+        print("="*60)
+        
         # Run various analyses
         analyzer.basic_statistics()
         print()
@@ -226,14 +223,20 @@ def main():
         print()
         analyzer.advanced_aggregations()
         print()
-        analyzer.export_for_analysis()
+        analyzer.export_for_analysis("data/mongodb_export.json")
         
-        print("\n✅ Analysis complete! Check the exported JSON file for further analysis.")
+        print("\n" + "="*60)
+        print("Analysis complete! Check data/mongodb_export.json for exported data.")
+        print("Your MongoDB Atlas database is ready for Task 2 (Sentiment Analysis)!")
+        print("="*60)
         
     except Exception as e:
         logger.error(f"Analysis failed: {str(e)}")
+        print(f"\nAnalysis failed: {str(e)}")
+        print("Please check your config.env file and MongoDB connection.")
     finally:
-        analyzer.close()
+        if 'analyzer' in locals():
+            analyzer.close()
 
 if __name__ == "__main__":
     main() 

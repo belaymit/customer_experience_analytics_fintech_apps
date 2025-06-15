@@ -1,21 +1,4 @@
-#!/usr/bin/env python3
-"""
-Data preprocessing script for cleaning and preparing bank review data.
-
-This script handles:
-- Loading raw scraped data
-- Removing duplicates
-- Handling missing values
-- Date normalization
-- Data validation
-- Saving cleaned data
-
-Author: Data Analytics Team
-Date: 2024
-"""
-
 import pandas as pd
-import numpy as np
 from datetime import datetime
 import logging
 import os

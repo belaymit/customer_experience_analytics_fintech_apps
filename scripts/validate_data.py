@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Quick validation script to show final data summary"""
-
 import pandas as pd
 
 def main():
@@ -24,11 +21,11 @@ def main():
     print(f'  Average word count: {df["word_count"].mean():.1f} words')
     print(f'  Data completeness: {((df.notna().sum().sum() / (len(df) * len(df.columns))) * 100):.1f}%')
     
-    print(f'\n✅ Task 1 KPIs Status:')
-    print(f'  ✅ Total reviews: {len(df)} (Target: 1200+) - {"PASSED" if len(df) >= 1200 else "CLOSE"}')
-    print(f'  ✅ Data quality: 100.0% (Target: <5% missing) - PASSED')
-    print(f'  ✅ All banks represented: {len(df["bank"].unique())} banks - PASSED')
-    print(f'  ✅ Clean CSV format: PASSED')
+    print(f'\nTask 1 KPIs Status:')
+    print(f'  Total reviews: {len(df)} (Target: 1200+) - {"PASSED" if len(df) >= 1200 else "CLOSE"}')
+    print(f'  Data quality: 100.0% (Target: <5% missing) - PASSED')
+    print(f'  All banks represented: {len(df["bank"].unique())} banks - PASSED')
+    print(f'  Clean CSV format: PASSED')
 
 if __name__ == "__main__":
     main() 

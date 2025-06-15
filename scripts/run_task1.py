@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-"""
-Main execution script for Task 1: Data Collection and Preprocessing
-
-This script orchestrates the complete Task 1 pipeline:
-1. Web scraping of bank reviews
-2. Data preprocessing and cleaning
-3. Data validation and reporting
-
-Author: Data Analytics Team
-Date: 2024
-"""
-
 import sys
 import os
 import logging
@@ -100,9 +87,9 @@ def main():
         )
         
         if kpis_met:
-            logger.info("🎉 ALL TASK 1 KPIs SUCCESSFULLY MET!")
+            logger.info("ALL TASK 1 KPIs SUCCESSFULLY MET!")
         else:
-            logger.warning("⚠️  Some KPIs not fully met, but data is usable")
+            logger.warning("Some KPIs not fully met, but data is usable")
         
         # Final summary
         logger.info("\n" + "="*80)
@@ -124,8 +111,8 @@ def main():
 if __name__ == "__main__":
     success = main()
     if success:
-        print("\n🎉 Task 1 completed successfully!")
+        print("\nTask 1 completed successfully!")
         print("You can now proceed to Task 2.")
     else:
-        print("\n❌ Task 1 failed. Please check the logs and try again.")
+        print("\nTask 1 failed. Please check the logs and try again.")
         sys.exit(1) 

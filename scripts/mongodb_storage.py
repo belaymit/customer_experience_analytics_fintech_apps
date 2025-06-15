@@ -1,21 +1,13 @@
-#!/usr/bin/env python3
-"""
-MongoDB Cloud Storage Script for Bank Review Data
-
-This script uploads the cleaned review data to MongoDB Atlas cloud database.
-It handles connection, data validation, and bulk insertion with error handling.
-
-Author: Data Analytics Team
-Date: 2024
-"""
-
 import pandas as pd
-import pymongo
 from pymongo import MongoClient
 import logging
 import os
 from datetime import datetime
 import json
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv('config.env')
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -24,7 +16,7 @@ logger = logging.getLogger(__name__)
 class MongoDBStorage:
     """Class to handle MongoDB Atlas storage operations"""
     
-    def __init__(self, connection_string=None, database_name="bank_reviews_db", collection_name="reviews"):
+    def __init__(self, connection_string=None, database_name=None, collection_name=None):
         """
         Initialize MongoDB connection
         
@@ -33,33 +25,29 @@ class MongoDBStorage:
             database_name (str): Name of the database
             collection_name (str): Name of the collection
         """
-        self.connection_string = connection_string
-        self.database_name = database_name
-        self.collection_name = collection_name
+        # Use environment variables or defaults
+        self.connection_string = connection_string or os.getenv('MONGODB_URI')
+        self.database_name = database_name or os.getenv('MONGODB_DATABASE', 'customer_reviews')
+        self.collection_name = collection_name or os.getenv('MONGODB_COLLECTION', 'reviews')
+        
+        if not self.connection_string:
+            raise ValueError("MongoDB URI must be provided in config.env file or as MONGODB_URI environment variable")
+        
         self.client = None
         self.db = None
         self.collection = None
         
     def get_connection_string(self):
-        """Get MongoDB connection string from user input or environment"""
+        """Get MongoDB connection string from environment or user input"""
         if self.connection_string:
             return self.connection_string
             
-        # Try to get from environment variable
-        connection_string = os.getenv('MONGODB_URI')
-        if connection_string:
-            logger.info("Using MongoDB URI from environment variable")
-            return connection_string
-        
-        # Get from user input
+        # Get from user input as fallback
         print("\n" + "="*60)
         print("MONGODB ATLAS SETUP")
         print("="*60)
-        print("To connect to MongoDB Atlas, you need:")
-        print("1. A MongoDB Atlas account (free tier available)")
-        print("2. A cluster created in Atlas")
-        print("3. A database user with read/write permissions")
-        print("4. Your connection string from Atlas")
+        print("MongoDB URI not found in environment variables.")
+        print("Please set MONGODB_URI in config.env file or provide it now.")
         print("\nConnection string format:")
         print("mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority")
         print("\n" + "="*60)
@@ -81,7 +69,7 @@ class MongoDBStorage:
             
             # Test the connection
             self.client.admin.command('ping')
-            logger.info("✅ Successfully connected to MongoDB Atlas!")
+            logger.info("Successfully connected to MongoDB Atlas!")
             
             # Get database and collection
             self.db = self.client[self.database_name]
@@ -96,7 +84,7 @@ class MongoDBStorage:
             logger.error(f"Failed to connect to MongoDB: {str(e)}")
             return False
     
-    def load_data(self, csv_file='../data/cleaned_reviews.csv'):
+    def load_data(self, csv_file='data/cleaned_reviews.csv'):
         """Load cleaned data from CSV file"""
         try:
             logger.info(f"Loading data from {csv_file}")
@@ -251,7 +239,7 @@ class MongoDBStorage:
         }
         
         # Save connection info
-        with open('../data/mongodb_connection_info.json', 'w') as f:
+        with open('data/mongodb_connection_info.json', 'w') as f:
             # Remove sensitive connection string for security
             safe_info = info.copy()
             safe_info['connection_string_format'] = "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority"
@@ -266,7 +254,7 @@ class MongoDBStorage:
             self.client.close()
             logger.info("MongoDB connection closed")
     
-    def upload_complete_pipeline(self, csv_file='../data/cleaned_reviews.csv'):
+    def upload_complete_pipeline(self, csv_file='data/cleaned_reviews.csv'):
         """Complete pipeline to upload data to MongoDB"""
         logger.info("="*60)
         logger.info("STARTING MONGODB UPLOAD PIPELINE")
@@ -318,7 +306,7 @@ class MongoDBStorage:
 
 def main():
     """Main function to run MongoDB upload"""
-    print("🚀 MongoDB Atlas Upload Tool")
+    print("MongoDB Atlas Upload Tool")
     print("This tool will upload your cleaned review data to MongoDB Atlas")
     
     # Initialize storage handler
@@ -328,10 +316,10 @@ def main():
     success = storage.upload_complete_pipeline()
     
     if success:
-        print("\n🎉 Data successfully uploaded to MongoDB Atlas!")
+        print("\nData successfully uploaded to MongoDB Atlas!")
         print("You can now use this data for analysis, Task 2, and beyond.")
     else:
-        print("\n❌ Upload failed. Please check the logs and try again.")
+        print("\nUpload failed. Please check the logs and try again.")
 
 if __name__ == "__main__":
     main() 
